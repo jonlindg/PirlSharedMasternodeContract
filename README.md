@@ -3,11 +3,18 @@ Contract for sharing ownership of a masternode on the Pirl network. This is curr
 
 # 1.Construction:
 The contract's contructor takes the parameters
+
 _masternodeContract: the address of the masternode contract
+
 _minDeposit: the minimum allowed deposit
+
 _maxDeposit: the maximum allowed deposit
+
 _owner: the owner of the contract (this should be the node operator)
+
 _votingLimit: minimum number of votes required for making a collective decision (to be explained later)
+
+_ownerBonus: bonus to the owner for running the node
 
 # 2.Add investors:
 The owner must approve who will be allowed to buy a share in the node. This is done by calling the function addAddress(address)
