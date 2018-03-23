@@ -34,8 +34,8 @@ Withdraw the stake from the masternode contract (which in turn calls withdrawSta
 # 7.Withdraw deposit:
 Can be called either before the node has been activated or after the stake has been withdrawn from the masternode contract and will withdraw the original deposit plus any remaining leftover from masternode rewards if it is called after the node has been closed (rewards will be allocated proportionally to the stake in the node).
 
-# 8. Distribute rewards while node is running:
-It is also possible to distribute masternode rewards while the node is running. To do this, call distribute(address[] a), where a is a list of addresses corresponding to all investors (the function checks that the sum of the balances of all elements in a equals the cost of the node). Any balance on the contract will then be distributed to all these addresses proportionally to the balances. This function can only be called after the node has been activated and before the node stake has been withdrawn. Note that the ownerBonus is added to the owner, so each investor receives (share in node)*(current balance of contract)/(cost of a node + owner bonus), where the (share in node) is increased by the ownerBonus if that investor is the owner.
+# 8.Withdraw rewards while node is running:
+Call withdraw() while the node is running to claim your share of the rewards.
 
 # 9.Voting to disable node:
 To prevent the owner from malicious practices (such as holding investors money hostage while not running the node), the node can be disabled by voting. To cast a vote to disable the node, call voteToDisable. This will increment the uint votes with the balance of the caller. After votes>requiredVotes is satisfied, where requiredVotes is set during creation of the contract, any investor can call the functions disableNode and withdrawStake.
