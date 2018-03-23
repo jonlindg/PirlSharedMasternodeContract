@@ -37,6 +37,9 @@ contract Pool {
 	//addresses of investors	
 	mapping (address=>bool) allowedAddresses;
 
+	//addresses of investors	
+	mapping (address=>uint256) withdrawn;
+
 	//number of votes cast to override node operator
 	uint votes;
 
@@ -80,6 +83,7 @@ contract Pool {
 
 	//constructor
 	function Pool(address _masternodeContract, uint _minDeposit, uint _maxDeposit, address _owner,uint256 _votingLimit, uint256 _ownerBonus) public {
+		require(minDeposit>=0);
 		require(minDeposit<=maxDeposit);
 		mn=MN(_masternodeContract);
 		owner=_owner;
@@ -247,6 +251,33 @@ contract Pool {
 	}
 
 
+
+	function withdraw() public returns (bool) {
+		require(allowedAddresses[msg.sender]);
+		require(nodeActive);
+		require(!nodeClosed);
+		uint256 b=this.balance+totalWithdrawn;
+
+		uint256 bal=balances[msg.sender];
+		if (msg.sender==owner){
+			bal=bal+ownerBonus;
+		}
+
+		require(withdrawn[msg.sender]<(b*bal)/(nodeCost+ownerBonus));
+		//reuse b as amount to be withdrawn
+		b=(b*bal)/(nodeCost+ownerBonus)-withdrawn[msg.sender];
+		totalWithdrawn+=b;
+		withdrawn[msg.sender]+=b;
+		msg.sender.transfer(b);
+
+		return true;
+
+		
+
+	}
+
+
+	uint256 totalWithdrawn=0;
 	bool ownerHasWithdrawn=false;
 	//withdraw deposit
 	function withdrawDeposit() public returns (bool){
