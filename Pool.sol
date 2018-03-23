@@ -97,6 +97,13 @@ contract Pool {
 
 	}
 
+	function makeIdentificationTransaction(address _poseidonAddress) payable public returns (bool) { 
+		require(msg.sender==owner);
+		_poseidonAddress.transfer(msg.value);
+		return true;
+		
+	}
+
 
 	function getMasternodeContractAddress() constant public returns (address){
 		return address(mn);
