@@ -297,37 +297,11 @@ contract Pool {
 	}
 
 
-	bool distributingRewards;
 
-	//distribute rewards to investors proportionally to share
-	function distribute(address[] a) public returns (bool){
-		require(!distributingRewards);
-		require(nodeActive);
-		require(allowedAddresses[msg.sender]);
-		distributingRewards=true;
-		uint256 check=0;
-		for(uint256 i=0;i<a.length;i++) {
-			check=check+balances[a[i]];
-		}
-
-		require(check==nodeCost);
-
-		//reuse this integer as a temporary store of the current balance
-		check=this.balance;
-
-		for(i=0;i<a.length;i++) {
-			a[i].transfer((balances[a[i]]*check)/(ownerBonus+nodeCost));
-		}		
-		owner.transfer((ownerBonus*check)/(ownerBonus+nodeCost));
-		distributingRewards=false;
-		Distribute(check,msg.sender);
-
-		return true;
-	}
 	
 
 	//events
-	event Distribute(uint256 _value, address _who);
+
 	event ActivateNode(address _who);
 	event DisableNode(address _who);
 	event WithdrawStake(address _who);
